@@ -3,10 +3,12 @@ import './App.css'
 import {Box, Stack, Typography} from "@mui/material"
 
 
+const host = "http://20.251.75.22/api"
+// const host = "http://0.0.0.0"
+
 async function fetchAiJoke() {
     console.log("fetchAiAnswer()")
-    // const url = "http://0.0.0.0/joke?model=openai"
-    const url = "http://20.251.81.7/joke?model=openai"
+    const url = `${host}/joke?model=openai`
     const response = await fetch(url)
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}, url: ${url}`)
@@ -15,7 +17,7 @@ async function fetchAiJoke() {
 }
 
 async function fetchApiInfo() {
-    const url = "http://0.0.0.0/version"
+    const url = `${host}/version`
     const response = await fetch(url)
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}, url: ${url}`)
