@@ -1,38 +1,43 @@
-import {Box, Button, TextField} from "@mui/material";
-import * as React from "react";
+import {Box, CircularProgress, IconButton, InputAdornment, OutlinedInput} from "@mui/material";
 import {useState} from "react";
+import {SendRounded} from "@mui/icons-material";
 
 
 interface ChatInputProps {
-    onSendMessage: (message: string) => void;
+    onSendMessage: (message: string) => void
+    isLoading: boolean
 }
 
 export function ChatInput(props: ChatInputProps) {
 
     const [message, setMessage] = useState('');
 
-    const handleSubmit = (event: React.FormEvent) => {
-        event.preventDefault()
+    function onSend() {
+        console.log("asdf")
         if (message.trim()) {
             props.onSendMessage(message)
             setMessage('')
         }
     }
 
-
     return (
-        <Box component="form" onSubmit={handleSubmit} sx={{display: 'flex', gap: 1}}>
-            <TextField
+        <Box sx={{display: 'flex', gap: 1}}>
+            <OutlinedInput
                 fullWidth
                 multiline
-                variant="outlined"
-                placeholder="Type your message..."
                 value={message}
-                onChange={(e) => setMessage(e.target.value)}
+                onChange={(c) => {
+                    setMessage(c.target.value)
+                }}
+                placeholder="Type your message..."
+                endAdornment={
+                    <InputAdornment position="end">
+                        <IconButton onClick={onSend} disabled={props.isLoading}>
+                            {props.isLoading ? <CircularProgress size={24}/> : <SendRounded/>}
+                        </IconButton>
+                    </InputAdornment>
+                }
             />
-            <Button type="submit" variant="contained" color="primary">
-                Send
-            </Button>
         </Box>
     )
 }

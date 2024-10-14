@@ -5,11 +5,12 @@ import {ChatInterface} from "./components/ChatInterface.tsx";
 import {Jokes} from "./components/Jokes.tsx";
 
 
-const host = "http://20.251.75.22/api"
-// const host = "http://0.0.0.0"
+
+//export const HOST = "http://20.251.75.22/api"
+export const HOST = "http://0.0.0.0:8080/api"
 
 async function fetchApiInfo() {
-    const url = `${host}/version`
+    const url = `${HOST}/version`
     const response = await fetch(url)
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}, url: ${url}`)
@@ -20,10 +21,6 @@ async function fetchApiInfo() {
 interface ApiInfo {
     version: string,
 }
-
-
-export const HOST = "http://20.251.75.22/api"
-// export const HOST = "http://0.0.0.0"
 
 function App() {
     const [apiInfo, setApiInfo] = useState<ApiInfo | null>(null)
