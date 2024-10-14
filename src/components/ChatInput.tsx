@@ -29,11 +29,11 @@ export function ChatInput(props: ChatInputProps) {
                 onChange={(c) => {
                     setMessage(c.target.value)
                 }}
-                placeholder="Type your message..."
+                placeholder="Ask a technical question..."
                 endAdornment={
                     <InputAdornment position="end">
                         <IconButton onClick={onSend} disabled={props.isLoading}>
-                            {props.isLoading ? <CircularProgress size={24}/> : <SendRounded/>}
+                            {props.isLoading ? <CircularProgress size={24}/> : <SendRounded color='primary'/>}
                         </IconButton>
                     </InputAdornment>
                 }

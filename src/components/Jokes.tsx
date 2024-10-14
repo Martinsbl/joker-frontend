@@ -1,10 +1,11 @@
-import {useEffect, useState} from 'react'
-import {Box, Stack, Typography} from "@mui/material"
-import {HOST} from "../App.tsx";
+import {useState} from 'react'
+import {Box, Button, CircularProgress, Stack, Typography} from "@mui/material"
+import {DEFAULT_WIDTH, HOST, MODEL_PROVIDER} from "../App.tsx";
+import {RefreshOutlined} from "@mui/icons-material";
 
 
 async function fetchAiJoke() {
-    const url = `${HOST}/joke?model=openai`
+    const url = `${HOST}/joke?model=${MODEL_PROVIDER}`
     const response = await fetch(url)
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}, url: ${url}`)
@@ -19,40 +20,53 @@ interface AiResponse {
 
 export function Jokes() {
     const [joke, setJoke] = useState<AiResponse | null>(null)
-    const [loading, setLoading] = useState<boolean>(true);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
+    const generateJoke = () => {
+        setIsLoading(true)
         fetchAiJoke()
             .then((result) => {
                 setJoke(result)
-                setLoading(false)
+                setIsLoading(false)
             })
             .catch((e) => {
                 setError(e.message)
-                setLoading(false)
+                setIsLoading(false)
             })
-    }, []);
+    }
 
-    if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
-    if (!joke) return <div>No data</div>;
 
     return (
         <Box
             sx={{
+                width: DEFAULT_WIDTH,
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                alignItems: 'center',
-                height: '90vh',
             }}>
-            <Box flexGrow={1} display="flex" alignItems="center">
-                <Stack>
-                    <Typography variant={"h6"} style={{whiteSpace: 'pre-line'}}>{joke.title}</Typography>
-                    <Typography style={{whiteSpace: 'pre-line'}}>{joke.body}</Typography>
-                </Stack>
-            </Box>
+            {joke ? <Joke title={joke.title} body={joke.body}/> : null}
+            <Button
+                onClick={generateJoke}
+                variant="contained"
+                disabled={isLoading}
+                endIcon={
+                    isLoading ? <CircularProgress size={16} sx={{color: 'white'}}/> : <RefreshOutlined/>
+                }
+                sx={{width: 200}}
+            >
+                Generate joke
+            </Button>
         </Box>
+    )
+}
+
+function Joke(props: { title: string, body: string; }) {
+    return (
+        <Stack spacing={2} sx={{textAlign: 'left', paddingY: 2}}>
+            <Typography variant='h5' style={{whiteSpace: 'pre-line'}}>{props.title}</Typography>
+            <Typography style={{whiteSpace: 'pre-line'}}>{props.body}</Typography>
+        </Stack>
     )
 }
