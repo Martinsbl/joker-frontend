@@ -1,20 +1,12 @@
 import {useEffect, useState} from 'react'
 import './App.css'
-import {Box, Stack, Typography} from "@mui/material"
+import {Box, Typography} from "@mui/material"
+import {ChatInterface} from "./components/ChatInterface.tsx";
+import {Jokes} from "./components/Jokes.tsx";
 
 
 const host = "http://20.251.75.22/api"
 // const host = "http://0.0.0.0"
-
-async function fetchAiJoke() {
-    console.log("fetchAiAnswer()")
-    const url = `${host}/joke?model=openai`
-    const response = await fetch(url)
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}, url: ${url}`)
-    }
-    return await response.json()
-}
 
 async function fetchApiInfo() {
     const url = `${host}/version`
@@ -25,33 +17,17 @@ async function fetchApiInfo() {
     return await response.json()
 }
 
-interface AiResponse {
-    title: string,
-    body: string,
-}
-
 interface ApiInfo {
     version: string,
 }
 
-function App() {
-    const [data, setData] = useState<AiResponse | null>(null)
-    const [apiInfo, setApiInfo] = useState<ApiInfo | null>(null)
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
 
-    console.log("before useEffect")
-    useEffect(() => {
-        fetchAiJoke()
-            .then((result) => {
-                setData(result)
-                setLoading(false)
-            })
-            .catch((e) => {
-                setError(e.message)
-                setLoading(false)
-            })
-    }, []);
+export const HOST = "http://20.251.75.22/api"
+// export const HOST = "http://0.0.0.0"
+
+function App() {
+    const [apiInfo, setApiInfo] = useState<ApiInfo | null>(null)
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         fetchApiInfo()
@@ -63,9 +39,7 @@ function App() {
             })
     }, []);
 
-    if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
-    if (!data) return <div>No data</div>;
 
     return (
         <Box
@@ -76,12 +50,8 @@ function App() {
                 alignItems: 'center',
                 height: '90vh',
             }}>
-            <Box flexGrow={1} display="flex" alignItems="center">
-                <Stack>
-                    <Typography variant={"h6"} style={{whiteSpace: 'pre-line'}}>{data.title}</Typography>
-                    <Typography style={{whiteSpace: 'pre-line'}}>{data.body}</Typography>
-                </Stack>
-            </Box>
+            <Jokes/>
+            <ChatInterface/>
             <Typography>{`API v${apiInfo?.version}`}</Typography>
         </Box>
     )
