@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 import './App.css'
-import {Box, Stack, Typography} from "@mui/material"
+import {Box, Divider, Stack, Typography} from "@mui/material"
 import {ChatInterface} from "./components/ChatInterface.tsx";
 import {Jokes} from "./components/Jokes.tsx";
 
@@ -48,7 +48,7 @@ function App() {
                 alignItems: 'center',
                 height: '90vh',
             }}>
-            <Stack spacing={10}>
+            <Stack spacing={10} divider={<Divider orientation='horizontal'/>}>
                 <Jokes/>
                 <ChatInterface/>
             </Stack>
