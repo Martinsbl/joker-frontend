@@ -4,11 +4,12 @@ import { ChatInput } from "./ChatInput.tsx";
 import { DEFAULT_WIDTH } from "../App.tsx";
 import { AiExtendedResponse } from "../models/AiResponse.tsx";
 import { AiResponseComponent } from "./AiPrompt.tsx";
+import { generateSessionId } from "../Utils.ts";
 
 async function fetchChat(prompt: string) {
 	const baseUrl = import.meta.env.VITE_BASE_URL;
 	const modelProvider = import.meta.env.VITE_MODEL_PROVIDER;
-	const url = `${baseUrl}/chat?modelProvider=${modelProvider}&prompt=${prompt}`;
+	const url = `${baseUrl}/chat?modelProvider=${modelProvider}&userId=${generateSessionId()}&prompt=${prompt}`;
 	const response = await fetch(url);
 	if (!response.ok) {
 		throw new Error(`HTTP error! status: ${response.status}, url: ${url}`);

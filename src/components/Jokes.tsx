@@ -4,11 +4,12 @@ import { DEFAULT_WIDTH } from "../App.tsx";
 import { RefreshOutlined } from "@mui/icons-material";
 import { AiExtendedResponse } from "../models/AiResponse.tsx";
 import { AiResponseComponent } from "./AiPrompt.tsx";
+import { generateSessionId } from "../Utils.ts";
 
 async function fetchAiJoke() {
 	const baseUrl = import.meta.env.VITE_BASE_URL;
 	const modelProvider = import.meta.env.VITE_MODEL_PROVIDER;
-	const url = `${baseUrl}/joke?modelProvider=${modelProvider}`;
+	const url = `${baseUrl}/joke?modelProvider=${modelProvider}&userId=${generateSessionId()}`;
 	const response = await fetch(url);
 	if (!response.ok) {
 		throw new Error(`HTTP error! status: ${response.status}, url: ${url}`);
