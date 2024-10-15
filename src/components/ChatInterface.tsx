@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import { ChatInput } from "./ChatInput.tsx";
-import { DEFAULT_WIDTH, HOST, MODEL_PROVIDER } from "../App.tsx";
+import { DEFAULT_WIDTH } from "../App.tsx";
 import { AiExtendedResponse } from "../models/AiResponse.tsx";
 import { AiResponseComponent } from "./AiPrompt.tsx";
 
 async function fetchChat(prompt: string) {
-	const url = `${HOST}/chat?modelProvider=${MODEL_PROVIDER}&prompt=${prompt}`;
+	const baseUrl = import.meta.env.VITE_BASE_URL;
+	const modelProvider = import.meta.env.VITE_MODEL_PROVIDER;
+	const url = `${baseUrl}/chat?modelProvider=${modelProvider}&prompt=${prompt}`;
 	const response = await fetch(url);
 	if (!response.ok) {
 		throw new Error(`HTTP error! status: ${response.status}, url: ${url}`);

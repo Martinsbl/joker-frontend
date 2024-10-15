@@ -4,13 +4,11 @@ import { Box, Divider, Stack, Typography } from "@mui/material";
 import { ChatInterface } from "./components/ChatInterface.tsx";
 import { Jokes } from "./components/Jokes.tsx";
 
-export const HOST = "http://20.251.75.22/api";
-// export const HOST = "http://0.0.0.0:8080/api"
-export const MODEL_PROVIDER = "openai";
 export const DEFAULT_WIDTH = 800;
 
 async function fetchApiInfo() {
-	const url = `${HOST}/version`;
+	const baseUrl = import.meta.env.VITE_BASE_URL;
+	const url = `${baseUrl}/version`;
 	const response = await fetch(url);
 	if (!response.ok) {
 		throw new Error(`HTTP error! status: ${response.status}, url: ${url}`);

@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { Button, CircularProgress, Stack } from "@mui/material";
-import { DEFAULT_WIDTH, HOST, MODEL_PROVIDER } from "../App.tsx";
+import { DEFAULT_WIDTH } from "../App.tsx";
 import { RefreshOutlined } from "@mui/icons-material";
 import { AiExtendedResponse } from "../models/AiResponse.tsx";
 import { AiResponseComponent } from "./AiPrompt.tsx";
 
 async function fetchAiJoke() {
-	const url = `${HOST}/joke?modelProvider=${MODEL_PROVIDER}`;
+	const baseUrl = import.meta.env.VITE_BASE_URL;
+	const modelProvider = import.meta.env.VITE_MODEL_PROVIDER;
+	const url = `${baseUrl}/joke?modelProvider=${modelProvider}`;
 	const response = await fetch(url);
 	if (!response.ok) {
 		throw new Error(`HTTP error! status: ${response.status}, url: ${url}`);
