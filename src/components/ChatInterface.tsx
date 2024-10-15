@@ -3,11 +3,12 @@ import {Box, Card, Icon, Stack, Typography} from "@mui/material";
 import {ChatInput} from "./ChatInput.tsx";
 import {DEFAULT_WIDTH, HOST, MODEL_PROVIDER} from "../App.tsx";
 import ReactMarkdown from 'react-markdown';
-import {QuestionMark} from "@mui/icons-material";
+import {AiResponseData} from "./AiResponseData.tsx";
+import {AiExtendedResponse} from "../models/AiResponse.tsx";
 
 
 async function fetchChat(prompt: string) {
-    const url = `${HOST}/chat?model=${MODEL_PROVIDER}&prompt=${prompt}`
+    const url = `${HOST}/chat?modelProvider=${MODEL_PROVIDER}&prompt=${prompt}`
     const response = await fetch(url)
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}, url: ${url}`)
@@ -15,14 +16,9 @@ async function fetchChat(prompt: string) {
     return await response.json()
 }
 
-interface AiResponse {
-    title: string,
-    body: string,
-}
-
 export function ChatInterface() {
 
-    const [chats, setChats] = useState<AiResponse[]>([])
+    const [chats, setChats] = useState<AiExtendedResponse[]>([])
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -50,8 +46,8 @@ export function ChatInterface() {
             <Box>
                 {chats.map((chat, index) => (
                     <Stack key={index} spacing={1} sx={{paddingY: 2}}>
-                        <ChatPrompt prompt={chat.title}/>
-                        <ChatAnswer answer={chat.body}/>
+                        <ChatPrompt prompt={chat.prompt}/>
+                        <ChatAnswer answer={chat}/>
                     </Stack>
                 ))}
             </Box>
@@ -64,7 +60,6 @@ function ChatPrompt(props: { prompt: string }) {
     return (
         <Card variant='outlined' sx={{padding: 1, backgroundColor: '#f0f8f8'}}>
             <Stack direction='row' alignItems='center'>
-                <QuestionMark sx={{scale: 0.9}}/>
                 <Typography variant='h6'>{props.prompt}</Typography>
             </Stack>
         </Card>
@@ -72,14 +67,15 @@ function ChatPrompt(props: { prompt: string }) {
 }
 
 
-function ChatAnswer(props: { answer: string }) {
+function ChatAnswer(props: { answer: AiExtendedResponse }) {
     return (
         <Card variant='outlined' sx={{padding: 1}}>
             <Stack>
                 <Icon>
                     <img src="/public/the-joker.svg" style={{height: '100%'}} alt="Your SVG"/>
                 </Icon>
-                <ReactMarkdown>{props.answer}</ReactMarkdown>
+                <ReactMarkdown>{props.answer.aiResponse.content.text}</ReactMarkdown>
+                <AiResponseData response={props.answer}/>
             </Stack>
         </Card>
     )

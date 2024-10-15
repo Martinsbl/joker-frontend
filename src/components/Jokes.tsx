@@ -1,11 +1,13 @@
 import {useState} from 'react'
-import {Box, Button, CircularProgress, Stack, Typography} from "@mui/material"
+import {Button, Card, CircularProgress, Stack, Typography} from "@mui/material"
 import {DEFAULT_WIDTH, HOST, MODEL_PROVIDER} from "../App.tsx";
 import {RefreshOutlined} from "@mui/icons-material";
+import {AiExtendedResponse} from "../models/AiResponse.tsx";
+import {AiResponseData} from "./AiResponseData.tsx";
 
 
 async function fetchAiJoke() {
-    const url = `${HOST}/joke?model=${MODEL_PROVIDER}`
+    const url = `${HOST}/joke?modelProvider=${MODEL_PROVIDER}`
     const response = await fetch(url)
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}, url: ${url}`)
@@ -13,13 +15,8 @@ async function fetchAiJoke() {
     return await response.json()
 }
 
-interface AiResponse {
-    title: string,
-    body: string,
-}
-
 export function Jokes() {
-    const [joke, setJoke] = useState<AiResponse | null>(null)
+    const [jokeResponse, setJokeResponse] = useState<AiExtendedResponse | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -27,7 +24,7 @@ export function Jokes() {
         setIsLoading(true)
         fetchAiJoke()
             .then((result) => {
-                setJoke(result)
+                setJokeResponse(result)
                 setIsLoading(false)
             })
             .catch((e) => {
@@ -39,14 +36,17 @@ export function Jokes() {
     if (error) return <div>{error}</div>;
 
     return (
-        <Box
+        <Stack
+            spacing={2}
             sx={{
                 width: DEFAULT_WIDTH,
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
             }}>
-            {joke ? <Joke title={joke.title} body={joke.body}/> : null}
+            {jokeResponse ?
+                <Joke response={jokeResponse}/>
+                : null}
             <Button
                 onClick={generateJoke}
                 variant="contained"
@@ -58,15 +58,20 @@ export function Jokes() {
             >
                 Generate joke
             </Button>
-        </Box>
+        </Stack>
     )
 }
 
-function Joke(props: { title: string, body: string; }) {
+function Joke(props: { response: AiExtendedResponse }) {
     return (
-        <Stack spacing={2} sx={{textAlign: 'left', paddingY: 2}}>
-            <Typography variant='h5' style={{whiteSpace: 'pre-line'}}>{props.title}</Typography>
-            <Typography style={{whiteSpace: 'pre-line'}}>{props.body}</Typography>
+        <Stack spacing={1} sx={{textAlign: 'left'}}>
+            <Card variant='outlined' sx={{padding: 1, backgroundColor: '#f0f8f8'}}>
+                <Typography variant='h5' style={{whiteSpace: 'pre-line'}}>{props.response.prompt}</Typography>
+            </Card>
+            <Card variant='outlined' sx={{padding: 1}}>
+                <Typography style={{whiteSpace: 'pre-line'}}>{props.response.aiResponse.content.text}</Typography>
+            </Card>
+            <AiResponseData response={props.response}/>
         </Stack>
     )
 }

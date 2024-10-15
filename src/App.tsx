@@ -52,7 +52,7 @@ function App() {
                 <Jokes/>
                 <ChatInterface/>
             </Stack>
-            <Typography>{`API v${apiInfo?.version}`}</Typography>
+            <Typography sx={{paddingTop: 8}}>{`API v${apiInfo?.version}`}</Typography>
         </Box>
     )
 }
