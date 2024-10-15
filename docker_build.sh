@@ -16,10 +16,12 @@ docker build --platform=linux/amd64 -t joker-frontend:$VERSION .
 # Tag the image
 echo "Tagging..."
 docker tag joker-frontend:$VERSION haven.testiprod.net/joker-frontend:$VERSION
+docker tag joker-frontend:$VERSION haven.testiprod.net/joker-frontend:latest
 
 # Push the image
 echo "Pushing..."
 docker push haven.testiprod.net/joker-frontend:$VERSION
+docker push haven.testiprod.net/joker-frontend:latest
 
 # Print the version for confirmation
 echo "Done pushing version: $VERSION"
