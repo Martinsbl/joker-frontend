@@ -1,9 +1,9 @@
-import { Card, IconButton, Stack, Tooltip, Typography } from "@mui/material";
-import { AiExtendedResponse } from "../models/AiResponse.tsx";
-import ReactMarkdown from "react-markdown";
-import { AiResponseData } from "./AiResponseData.tsx";
-import { useState } from "react";
 import { ContentCopyOutlined } from "@mui/icons-material";
+import { Card, IconButton, Stack, Tooltip, Typography } from "@mui/material";
+import { useState } from "react";
+import ReactMarkdown from "react-markdown";
+import type { AiExtendedResponse } from "../models/AiResponse.tsx";
+import { AiResponseData } from "./AiResponseData.tsx";
 
 export function AiResponseComponent(props: { response: AiExtendedResponse }) {
 	return (

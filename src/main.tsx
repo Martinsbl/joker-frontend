@@ -4,13 +4,16 @@ import App from "./App.tsx";
 import "./index.css";
 import { ErrorBoundary } from "react-error-boundary";
 import { ErrorView } from "./components/ErrorComponent.tsx";
+import { ModelOptionProvider } from "./components/ModelOptionProvider.tsx";
 
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
 		<ErrorBoundary
 			fallback={<ErrorView e={Error("Something went wrong...")} />}
 		>
-			<App />
+			<ModelOptionProvider>
+				<App />
+			</ModelOptionProvider>
 		</ErrorBoundary>
 	</StrictMode>,
 );

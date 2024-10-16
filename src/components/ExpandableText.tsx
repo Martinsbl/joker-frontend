@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { ExpandMore } from "@mui/icons-material";
 import {
 	Accordion,
 	AccordionDetails,
 	AccordionSummary,
-	styled,
 	Typography,
+	styled,
 } from "@mui/material";
-import { ExpandMore } from "@mui/icons-material";
+import { useState } from "react";
 
 interface ExpandableTextProps {
 	summary: string;

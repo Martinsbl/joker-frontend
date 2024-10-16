@@ -1,23 +1,24 @@
-import { useState } from "react";
-import { Button, CircularProgress, Stack } from "@mui/material";
-import { DEFAULT_WIDTH } from "../App.tsx";
 import { RefreshOutlined } from "@mui/icons-material";
-import { AiExtendedResponse } from "../models/AiResponse.tsx";
-import { AiResponseComponent } from "./AiPrompt.tsx";
-import { ErrorView } from "./ErrorComponent.tsx";
+import { Button, CircularProgress, Stack } from "@mui/material";
+import { useState } from "react";
+import { DEFAULT_WIDTH } from "../App.tsx";
 import { generateSessionId } from "../Utils.ts";
 import { checkForRequestErrors } from "../errors/ApiErrorClass.tsx";
+import type { AiExtendedResponse } from "../models/AiResponse.tsx";
+import { useModelOption } from "../utils/ModelFunctions.tsx";
+import { AiResponseComponent } from "./AiPrompt.tsx";
+import { ErrorView } from "./ErrorComponent.tsx";
 
-async function fetchAiJoke() {
+async function fetchAiJoke(selectedOption: string) {
 	const baseUrl = import.meta.env.VITE_BASE_URL;
-	const modelProvider = import.meta.env.VITE_MODEL_PROVIDER;
-	const url = `${baseUrl}/joke?modelProvider=${modelProvider}&userId=${generateSessionId()}`;
+	const url = `${baseUrl}/joke?modelProvider=${selectedOption}&userId=${generateSessionId()}`;
 	const response = await fetch(url);
 	await checkForRequestErrors(response);
 	return await response.json();
 }
 
 export function Jokes() {
+	const { selectedOption } = useModelOption();
 	const [jokeResponse, setJokeResponse] = useState<AiExtendedResponse | null>(
 		null,
 	);
@@ -26,7 +27,7 @@ export function Jokes() {
 
 	const generateJoke = () => {
 		setIsLoading(true);
-		fetchAiJoke()
+		fetchAiJoke(selectedOption!.id)
 			.then((result) => {
 				setJokeResponse(result);
 				setIsLoading(false);

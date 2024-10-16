@@ -1,4 +1,4 @@
-import { Stack, Typography, TypographyProps } from "@mui/material";
+import { Stack, Typography, type TypographyProps } from "@mui/material";
 
 interface LabeledTextProps {
 	label: string;
@@ -9,7 +9,7 @@ interface LabeledTextProps {
 export function LabeledText({
 	label,
 	text,
-	variant = "caption",
+	variant = "body1",
 }: LabeledTextProps) {
 	return (
 		<Stack direction="row" spacing={1}>

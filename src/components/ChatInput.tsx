@@ -1,3 +1,4 @@
+import { SendRounded } from "@mui/icons-material";
 import {
 	Box,
 	CircularProgress,
@@ -6,7 +7,6 @@ import {
 	OutlinedInput,
 } from "@mui/material";
 import { useState } from "react";
-import { SendRounded } from "@mui/icons-material";
 
 interface ChatInputProps {
 	onSendMessage: (message: string) => void;

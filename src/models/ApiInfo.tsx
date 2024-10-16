@@ -4,6 +4,11 @@ export interface ApiInfo {
 }
 
 export interface ModelConfig {
-	modelProvider: string;
+	modelProvider: ModelProvider;
 	supportedModels: string[];
+}
+
+export interface ModelProvider {
+	id: string;
+	friendlyName: string;
 }

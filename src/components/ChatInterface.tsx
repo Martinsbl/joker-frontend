@@ -1,23 +1,25 @@
-import { useState } from "react";
 import { Box, Stack, Typography } from "@mui/material";
-import { ChatInput } from "./ChatInput.tsx";
+import { useState } from "react";
 import { DEFAULT_WIDTH } from "../App.tsx";
-import { AiExtendedResponse } from "../models/AiResponse.tsx";
-import { AiResponseComponent } from "./AiPrompt.tsx";
 import { generateSessionId } from "../Utils.ts";
 import { checkForRequestErrors } from "../errors/ApiErrorClass.tsx";
+import type { AiExtendedResponse } from "../models/AiResponse.tsx";
+import { useModelOption } from "../utils/ModelFunctions.tsx";
+import { AiResponseComponent } from "./AiPrompt.tsx";
+import { ChatInput } from "./ChatInput.tsx";
 import { ErrorView } from "./ErrorComponent.tsx";
 
-async function fetchChat(prompt: string) {
+async function fetchChat(selectedOption: string | undefined, prompt: string) {
 	const baseUrl = import.meta.env.VITE_BASE_URL;
-	const modelProvider = import.meta.env.VITE_MODEL_PROVIDER;
-	const url = `${baseUrl}/chat?modelProvider=${modelProvider}&userId=${generateSessionId()}&prompt=${prompt}`;
+	const url = `${baseUrl}/chat?modelProvider=${selectedOption}&userId=${generateSessionId()}&prompt=${prompt}`;
 	const response = await fetch(url);
 	await checkForRequestErrors(response);
 	return await response.json();
 }
 
 export function ChatInterface() {
+	const { selectedOption } = useModelOption();
+
 	const [chats, setChats] = useState<AiExtendedResponse[]>([]);
 	const [loading, setLoading] = useState<boolean>(false);
 	const [error, setError] = useState<Error | null>(null);
@@ -25,7 +27,7 @@ export function ChatInterface() {
 	const handleSendMessage = (message: string) => {
 		setLoading(true);
 
-		fetchChat(message)
+		fetchChat(selectedOption?.id, message)
 			.then((result) => {
 				setChats([...chats, result]);
 				setLoading(false);

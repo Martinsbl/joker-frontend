@@ -2,14 +2,16 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { Box, Divider, Stack, Typography } from "@mui/material";
 import { ChatInterface } from "./components/ChatInterface.tsx";
-import { Jokes } from "./components/Jokes.tsx";
-import { ApiInfo } from "./models/ApiInfo.tsx";
-import { checkForRequestErrors } from "./errors/ApiErrorClass.tsx";
 import { ErrorView } from "./components/ErrorComponent.tsx";
+import { Jokes } from "./components/Jokes.tsx";
+import { ModelProviderChips } from "./components/ModelProviderChips.tsx";
+import { checkForRequestErrors } from "./errors/ApiErrorClass.tsx";
+import type { ApiInfo } from "./models/ApiInfo.tsx";
+import { useModelOptionsFetch } from "./utils/ModelFunctions.tsx";
 
 export const DEFAULT_WIDTH = 800;
 
-async function fetchApiInfo() {
+export async function fetchApiInfo() {
 	const baseUrl = import.meta.env.VITE_BASE_URL;
 	const url = `${baseUrl}/info`;
 	const response = await fetch(url);
@@ -20,6 +22,8 @@ async function fetchApiInfo() {
 function App() {
 	const [apiInfo, setApiInfo] = useState<ApiInfo | null>(null);
 	const [error, setError] = useState<Error | null>(null);
+
+	useModelOptionsFetch();
 
 	useEffect(() => {
 		fetchApiInfo()
@@ -44,6 +48,7 @@ function App() {
 			}}
 		>
 			<Stack spacing={10} divider={<Divider orientation="horizontal" />}>
+				{apiInfo ? <ModelProviderChips /> : null}
 				<Jokes />
 				<ChatInterface />
 			</Stack>

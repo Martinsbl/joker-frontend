@@ -1,13 +1,13 @@
-import { Stack, Typography } from "@mui/material";
 import { WarningOutlined } from "@mui/icons-material";
-import { ExpandableText } from "./ExpandableText.tsx";
+import { Stack, Typography } from "@mui/material";
+import type React from "react";
 import {
 	ApiErrorClass,
-	ApiErrorResponse,
+	type ApiErrorResponse,
 	RequestErrorClass,
-	RequestErrorResponse,
+	type RequestErrorResponse,
 } from "../errors/ApiErrorClass.tsx";
-import React from "react";
+import { ExpandableText } from "./ExpandableText.tsx";
 
 export function ErrorView(props: { e: Error }) {
 	const error = props.e;
