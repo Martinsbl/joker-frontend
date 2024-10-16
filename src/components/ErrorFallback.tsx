@@ -34,7 +34,7 @@ function ApiError(props: { error: ApiErrorResponse }) {
 			</Typography>
 			<Typography variant="body1">{message}</Typography>
 			<Typography variant="body2">{url}</Typography>
-			<Stack sx={{ width: 600 }} textAlign="left">
+			<Stack sx={{ width: 800 }} textAlign="left">
 				<ExpandableText
 					summary={exceptionName ?? "Exception"}
 					text={stackTrace}

@@ -43,9 +43,8 @@ export function ExpandableText(props: ExpandableTextProps) {
 
 const LogOutput = styled(Typography)(({ theme }) => ({
 	fontFamily: "monospace",
-	whiteSpace: "pre-wrap",
-	padding: theme.spacing(2),
+	whiteSpace: "pre",
 	borderRadius: theme.shape.borderRadius,
 	overflow: "auto",
-	maxHeight: "300px", // Adjust as needed
+	maxHeight: "500px",
 }));
