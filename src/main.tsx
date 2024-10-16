@@ -7,7 +7,9 @@ import { ErrorView } from "./components/ErrorFallback.tsx";
 
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
-		<ErrorBoundary fallback={<ErrorView e={Error("Something went wrong...")}/>}>
+		<ErrorBoundary
+			fallback={<ErrorView e={Error("Something went wrong...")} />}
+		>
 			<App />
 		</ErrorBoundary>
 	</StrictMode>,

@@ -33,7 +33,7 @@ export class ApiErrorClass extends Error {
 async function fetchAiJoke() {
 	const baseUrl = import.meta.env.VITE_BASE_URL;
 	const modelProvider = import.meta.env.VITE_MODEL_PROVIDER;
-	const url = `${baseUrl}/joke?modelPgrovider=${modelProvider}&userId=${generateSessionId()}`;
+	const url = `${baseUrl}/joke?modelProvider=${modelProvider}&userId=${generateSessionId()}`;
 	const response = await fetch(url);
 	if (!response.ok) {
 		const asdf: ApiErrorResponse = await response.json();
