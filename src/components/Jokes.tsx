@@ -1,38 +1,43 @@
-import {useState} from "react";
-import {Button, CircularProgress, Stack} from "@mui/material";
-import {DEFAULT_WIDTH} from "../App.tsx";
-import {RefreshOutlined} from "@mui/icons-material";
-import {AiExtendedResponse} from "../models/AiResponse.tsx";
-import {AiResponseComponent} from "./AiPrompt.tsx";
-import {generateSessionId} from "../Utils.ts";
-import {ErrorView} from "./ErrorFallback.tsx";
+import { useState } from "react";
+import { Button, CircularProgress, Stack } from "@mui/material";
+import { DEFAULT_WIDTH } from "../App.tsx";
+import { RefreshOutlined } from "@mui/icons-material";
+import { AiExtendedResponse } from "../models/AiResponse.tsx";
+import { AiResponseComponent } from "./AiPrompt.tsx";
+import { generateSessionId } from "../Utils.ts";
+import { ErrorView } from "./ErrorFallback.tsx";
 
-interface ApiErrorResponse {
-	message: string
-	exceptionName: string
-	stackTrace: string
+interface HttpStatus {
+	value: number;
+	description: string;
+}
+
+export interface ApiErrorResponse {
+	status: HttpStatus;
+	message: string;
+	exceptionName: string;
+	url: string;
+	stackTrace: string;
 }
 
 export class ApiErrorClass extends Error {
-	exceptionName: string
-	stackTrace: string
+	errorData: ApiErrorResponse;
 
 	constructor(message: string, apiErrorResponse: ApiErrorResponse) {
 		super(message);
-		this.name = "APIError"
-		this.exceptionName = apiErrorResponse.exceptionName
-		this.stackTrace = apiErrorResponse.stackTrace
+		this.name = "APIError";
+		this.errorData = apiErrorResponse;
 	}
 }
 
 async function fetchAiJoke() {
 	const baseUrl = import.meta.env.VITE_BASE_URL;
 	const modelProvider = import.meta.env.VITE_MODEL_PROVIDER;
-	const url = `${baseUrl}/joke?modelProvider=${modelProvider}&userId=${generateSessionId()}`;
+	const url = `${baseUrl}/joke?modelPgrovider=${modelProvider}&userId=${generateSessionId()}`;
 	const response = await fetch(url);
 	if (!response.ok) {
-		const asdf: ApiErrorResponse = await response.json()
-		console.error(asdf.exceptionName)
+		const asdf: ApiErrorResponse = await response.json();
+		console.error(asdf.exceptionName);
 		throw new ApiErrorClass(asdf.message, asdf);
 	}
 	return await response.json();
@@ -58,7 +63,7 @@ export function Jokes() {
 			});
 	};
 
-	if (error) return <ErrorView e={error}/>;
+	if (error) return <ErrorView e={error} />;
 
 	return (
 		<Stack

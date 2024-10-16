@@ -1,5 +1,6 @@
 import { AiExtendedResponse } from "../models/AiResponse.tsx";
-import { Card, Stack, Typography } from "@mui/material";
+import { Card, Stack } from "@mui/material";
+import { LabeledText } from "./LabeledText.tsx";
 
 export function AiResponseData(props: { response: AiExtendedResponse }) {
 	const response = props.response;
@@ -51,20 +52,4 @@ function formatEpochTimestamp(epochTimestamp: number): string {
 	const seconds = date.getSeconds().toString().padStart(2, "0");
 
 	return `${year}.${month}.${day} ${hours}:${minutes}:${seconds}`;
-}
-
-interface LabeledTextProps {
-	label: string;
-	text: string;
-}
-
-function LabeledText(props: LabeledTextProps) {
-	return (
-		<Stack direction="row" spacing={1}>
-			<Typography variant="caption" fontWeight="bold">
-				{props.label}
-			</Typography>
-			<Typography variant="caption">{props.text}</Typography>
-		</Stack>
-	);
 }
