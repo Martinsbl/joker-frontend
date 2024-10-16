@@ -1,13 +1,13 @@
-import { RefreshOutlined } from "@mui/icons-material";
-import { Button, CircularProgress, Stack } from "@mui/material";
-import { useState } from "react";
-import { DEFAULT_WIDTH } from "../App.tsx";
-import { generateSessionId } from "../Utils.ts";
-import { checkForRequestErrors } from "../errors/ApiErrorClass.tsx";
-import type { AiExtendedResponse } from "../models/AiResponse.tsx";
-import { useModelOption } from "../utils/ModelFunctions.tsx";
-import { AiResponseComponent } from "./AiPrompt.tsx";
-import { ErrorView } from "./ErrorComponent.tsx";
+import {RefreshOutlined} from "@mui/icons-material";
+import {Button, CircularProgress, Stack} from "@mui/material";
+import {useState} from "react";
+import {DEFAULT_WIDTH} from "../App.tsx";
+import {generateSessionId} from "../Utils.ts";
+import {checkForRequestErrors} from "../errors/ApiErrorClass.tsx";
+import type {AiExtendedResponse} from "../models/AiResponse.tsx";
+import {useModelOption} from "../utils/ModelFunctions.tsx";
+import {AiResponseComponent} from "./AiPrompt.tsx";
+import {ErrorView} from "./ErrorComponent.tsx";
 
 async function fetchAiJoke(selectedOption: string) {
 	const baseUrl = import.meta.env.VITE_BASE_URL;
@@ -50,22 +50,23 @@ export function Jokes() {
 				justifyContent: "space-between",
 			}}
 		>
-			{jokeResponse ? <AiResponseComponent response={jokeResponse} /> : null}
 			<Button
 				onClick={generateJoke}
+				disableElevation
 				variant="contained"
 				disabled={isLoading}
 				endIcon={
 					isLoading ? (
-						<CircularProgress size={16} sx={{ color: "white" }} />
+						<CircularProgress size={16} sx={{color: "white"}}/>
 					) : (
-						<RefreshOutlined />
+						<RefreshOutlined/>
 					)
 				}
-				sx={{ width: 200 }}
+				sx={{width: 200}}
 			>
 				Generate joke
 			</Button>
+			{jokeResponse ? <AiResponseComponent response={jokeResponse} /> : null}
 		</Stack>
 	);
 }

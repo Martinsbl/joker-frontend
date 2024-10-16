@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
-import { fetchApiInfo } from "../App.tsx";
 import type { ApiInfo } from "../models/ApiInfo.tsx";
 import { ModelOptionContext } from "./ModelUtils.tsx";
+import {fetchApiInfo} from "../components/VersionNumber.tsx";
 
 export const useModelOption = () => {
 	const context = useContext(ModelOptionContext);

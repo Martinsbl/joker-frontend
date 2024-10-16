@@ -43,7 +43,7 @@ export function ChatInterface() {
 	return (
 		<Box sx={{ textAlign: "left", width: DEFAULT_WIDTH }}>
 			<Typography variant="h5" gutterBottom>
-				Tech support
+				Chat bot
 			</Typography>
 			<Box>
 				{chats.map((chat, index) => (
