@@ -3,26 +3,23 @@ import "./App.css";
 import { Box, Divider, Stack, Typography } from "@mui/material";
 import { ChatInterface } from "./components/ChatInterface.tsx";
 import { Jokes } from "./components/Jokes.tsx";
+import { ApiInfo } from "./models/ApiInfo.tsx";
+import { checkForRequestErrors } from "./errors/ApiErrorClass.tsx";
+import { ErrorView } from "./components/ErrorComponent.tsx";
 
 export const DEFAULT_WIDTH = 800;
 
 async function fetchApiInfo() {
 	const baseUrl = import.meta.env.VITE_BASE_URL;
-	const url = `${baseUrl}/version`;
+	const url = `${baseUrl}/info`;
 	const response = await fetch(url);
-	if (!response.ok) {
-		throw new Error(`HTTP error! status: ${response.status}, url: ${url}`);
-	}
+	await checkForRequestErrors(response);
 	return await response.json();
-}
-
-interface ApiInfo {
-	version: string;
 }
 
 function App() {
 	const [apiInfo, setApiInfo] = useState<ApiInfo | null>(null);
-	const [error, setError] = useState<string | null>(null);
+	const [error, setError] = useState<Error | null>(null);
 
 	useEffect(() => {
 		fetchApiInfo()
@@ -30,11 +27,11 @@ function App() {
 				setApiInfo(result);
 			})
 			.catch((e) => {
-				setError(e.message);
+				setError(e);
 			});
 	}, []);
 
-	if (error) return <div>{error}</div>;
+	if (error) return <ErrorView e={error} />;
 
 	return (
 		<Box

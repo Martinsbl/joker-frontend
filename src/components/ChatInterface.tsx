@@ -5,22 +5,22 @@ import { DEFAULT_WIDTH } from "../App.tsx";
 import { AiExtendedResponse } from "../models/AiResponse.tsx";
 import { AiResponseComponent } from "./AiPrompt.tsx";
 import { generateSessionId } from "../Utils.ts";
+import { checkForRequestErrors } from "../errors/ApiErrorClass.tsx";
+import { ErrorView } from "./ErrorComponent.tsx";
 
 async function fetchChat(prompt: string) {
 	const baseUrl = import.meta.env.VITE_BASE_URL;
 	const modelProvider = import.meta.env.VITE_MODEL_PROVIDER;
 	const url = `${baseUrl}/chat?modelProvider=${modelProvider}&userId=${generateSessionId()}&prompt=${prompt}`;
 	const response = await fetch(url);
-	if (!response.ok) {
-		throw new Error(`HTTP error! status: ${response.status}, url: ${url}`);
-	}
+	await checkForRequestErrors(response);
 	return await response.json();
 }
 
 export function ChatInterface() {
 	const [chats, setChats] = useState<AiExtendedResponse[]>([]);
 	const [loading, setLoading] = useState<boolean>(false);
-	const [error, setError] = useState<string | null>(null);
+	const [error, setError] = useState<Error | null>(null);
 
 	const handleSendMessage = (message: string) => {
 		setLoading(true);
@@ -31,12 +31,12 @@ export function ChatInterface() {
 				setLoading(false);
 			})
 			.catch((e) => {
-				setError(e.message);
+				setError(e);
 				setLoading(false);
 			});
 	};
 
-	if (error) return <div>{error}</div>;
+	if (error) return <ErrorView e={error} />;
 
 	return (
 		<Box sx={{ textAlign: "left", width: DEFAULT_WIDTH }}>

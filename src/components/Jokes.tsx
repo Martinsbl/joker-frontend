@@ -4,42 +4,16 @@ import { DEFAULT_WIDTH } from "../App.tsx";
 import { RefreshOutlined } from "@mui/icons-material";
 import { AiExtendedResponse } from "../models/AiResponse.tsx";
 import { AiResponseComponent } from "./AiPrompt.tsx";
+import { ErrorView } from "./ErrorComponent.tsx";
 import { generateSessionId } from "../Utils.ts";
-import { ErrorView } from "./ErrorFallback.tsx";
-
-interface HttpStatus {
-	value: number;
-	description: string;
-}
-
-export interface ApiErrorResponse {
-	status: HttpStatus;
-	message: string;
-	exceptionName: string;
-	url: string;
-	stackTrace: string;
-}
-
-export class ApiErrorClass extends Error {
-	errorData: ApiErrorResponse;
-
-	constructor(message: string, apiErrorResponse: ApiErrorResponse) {
-		super(message);
-		this.name = "APIError";
-		this.errorData = apiErrorResponse;
-	}
-}
+import { checkForRequestErrors } from "../errors/ApiErrorClass.tsx";
 
 async function fetchAiJoke() {
 	const baseUrl = import.meta.env.VITE_BASE_URL;
 	const modelProvider = import.meta.env.VITE_MODEL_PROVIDER;
 	const url = `${baseUrl}/joke?modelProvider=${modelProvider}&userId=${generateSessionId()}`;
 	const response = await fetch(url);
-	if (!response.ok) {
-		const asdf: ApiErrorResponse = await response.json();
-		console.error(asdf.exceptionName);
-		throw new ApiErrorClass(asdf.message, asdf);
-	}
+	await checkForRequestErrors(response);
 	return await response.json();
 }
 
